@@ -1,4 +1,4 @@
-package springbook.user.service;
+package springbook.service;
 
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;

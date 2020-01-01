@@ -1,10 +1,13 @@
-package springbook.user.service;
+package springbook.service;
 
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.transaction.PlatformTransactionManager;
 
 import java.lang.reflect.Proxy;
 
+/**
+ * Useless Anymore
+ */
 public class TxProxyFactoryBean implements FactoryBean<Object> {
     Object target;
     PlatformTransactionManager transactionManager;

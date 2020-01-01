@@ -1,4 +1,4 @@
-package springbook.user.service;
+package springbook.service;
 
 import org.springframework.aop.ClassFilter;
 import org.springframework.aop.support.NameMatchMethodPointcut;

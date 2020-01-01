@@ -1,4 +1,4 @@
-package springbook.user.service;
+package springbook.service;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -33,12 +33,11 @@ import static org.junit.Assert.*;
 public class UserServiceTest {
 
     @Autowired UserService userService;
-    @Autowired UserServiceImpl userServiceImpl;
     @Autowired ApplicationContext context;
     @Autowired DataSource dataSource;
     @Autowired PlatformTransactionManager transactionManager;
     @Autowired MailSender mailSender;
-    //@Autowired UserService testUserService;
+    @Autowired UserService testUserService;
 
     private UserDao dao;
 
@@ -87,7 +86,7 @@ public class UserServiceTest {
 
 
         MockMailSender mockMailSender = new MockMailSender();
-        userServiceImpl.setMailSender(mockMailSender);
+        userService.setMailSender(mockMailSender);
 
         userService.upgradeLevels();
 
@@ -137,14 +136,7 @@ public class UserServiceTest {
 
     @Test
     @DirtiesContext
-    public void upgradeAllOrNothing()throws Exception{ // p.458
-        TestUserService testUserService = new TestUserService(users.get(3).getId());
-        testUserService.setUserDao(dao);
-        testUserService.setMailSender(mailSender);
-
-        TxProxyFactoryBean txProxyFactoryBean = context.getBean("&userService",TxProxyFactoryBean.class);
-        txProxyFactoryBean.setTarget(testUserService);
-        UserService txUserService = (UserService)txProxyFactoryBean.getObject();
+    public void upgradeAllOrNothing(){
 
         dao.deleteAll();
 
@@ -152,7 +144,7 @@ public class UserServiceTest {
             dao.add(user);
 
         try{
-            txUserService.upgradeLevels();
+            this.testUserService.upgradeLevels();
             fail("TestUserService expected");
         }catch (TestUserServiceException e){
 
@@ -182,12 +174,8 @@ public class UserServiceTest {
         assertThat(updated.getLevel(),is(expectedLv));
     }
 
-    static class TestUserService extends UserServiceImpl {
-        private String id;
-
-        public TestUserService(String id) {
-            this.id = id;
-        }
+    static class TestUserServiceImpl extends UserServiceImpl {
+        private String id = "c";
 
         public void upgradeLevel(User user){
             if(user.getId().equals(this.id))
